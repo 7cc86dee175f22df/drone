@@ -1,0 +1,139 @@
+import pygame
+from random import randint
+
+screenwith = 500
+
+win = pygame.display.set_mode((screenwith, screenwith))
+pygame.display.set_caption("drone test 2D")
+
+x = 50
+y = 50
+width = 60
+height = 60
+vel = 5
+
+safty = False
+
+run = True
+
+def reset():
+    x= 50
+    y= 50
+    width = 60
+    height = 60
+    vel = 5
+
+
+ry1 = randint(50, 500)  #generating y coordinant of obsicle
+rx1 = randint(50, 500)  # generating x coordinant of obsticle
+
+c11 = randint(230, 255) #generating random coller c1-c3
+c21 = randint(0, 5)
+c31 = randint(0, 5)
+
+rw1 = randint(10, 100) #generating random with
+rh1 = randint(10, 100) #generating random height
+
+
+xmin1 = rx1-rw1  #defining hitbox obsitcle 1
+xmax1 = rx1+rw1
+
+ymin1 = ry1-rh1
+ymax1 = ry1+rh1
+
+minx = x-55  #defining hitbox drone
+maxx = x+55
+miny = y-55
+maxy = y+55
+
+ry2 = randint(50, 500)  #generating y coordinant of obsicle
+rx2 = randint(50, 500)  # generating x coordinant of obsticle
+
+c12 = randint(0, 255) #generating random coller c1-c3
+c22 = randint(0, 255)
+c32 = randint(0, 255)
+
+rw2 = randint(10, 100) #generating random with
+rh2 = randint(10, 100) #generating random height
+
+xmin2 = rx2-rw2  #defining hitbox obsitcle 2
+xmax2 = rx2+rw2
+
+ymin2 = ry2-rh2
+ymax2 = ry2+rh2
+
+
+p = 0   #points
+pen = 1 #penalty
+while run:
+    pygame.time.delay(25) #time in miliseconds
+
+    for event in pygame.event.get():  #quit
+        if event.type == pygame.QUIT:
+            run = False
+
+    keys = pygame.key.get_pressed() #controls + border
+    if keys[pygame.K_LEFT]:
+        if safty == True and x > vel:
+            x -= vel
+        if safty == False:
+            x -= vel
+    if keys[pygame.K_RIGHT]:
+        if safty == True and x < screenwith - width - vel:
+                x += vel
+        if safty == False:
+                x += vel
+    if keys[pygame.K_UP]:
+            if safty == True and y > vel:
+                y -= vel
+            if safty == False:
+                y -= vel
+    if keys[pygame.K_DOWN]:
+            if safty == True and y < screenwith - width - vel:
+                y += vel
+            if safty == False:
+                y += vel
+    if x < 0 and safty == False:
+           x = 50
+           y = 50
+           p = p - pen
+           print (p)
+    if x > screenwith - 55 and safty == False:
+            x = 50
+            y = 50
+            p = p - pen
+            print (p)
+    if y < 0 and safty == False:
+            x = 50
+            y = 50
+            p = p - pen
+            print (p)
+    if y > screenwith - 55 and safty == False:
+            x = 50
+            y = 50
+            p = p - pen
+            print (p)
+    #if x == rx1 or y == ry1 or x == rx1 + rw1 or y == ry1 + rh1:
+      #  x = 50
+      #  y = 50
+       # p = p - pen
+       # print (p)
+    if xmin1 < x < xmax1 and ymin1 < y < ymax1: #or xmin1 < xmax1 < xmax1 and ymin1 < maxy < ymax1:
+        x = 50
+        y = 50
+        p = p - pen
+        print (p)
+    if xmin2 < x < xmax2 and ymin2 < y < ymax2: #finishline
+        x = 50
+        y = 50
+        p = p + pen
+        print(p)
+    win.fill((255,255,255))
+    pygame.draw.rect(win, (0, 0, 255), (x, y,width, height)) #drone, could not get circle working because missing veriable problem
+    pygame.draw.rect(win, (c11, c21, c31), (rx1, ry1, rw1, rh1)) #ob 1
+    pygame.draw.rect(win, (c12, c22, c32), (rx2, ry2, rw2, rh2))
+    pygame.display.update() # update screen
+
+
+
+pygame.quit()
